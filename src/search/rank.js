@@ -1,6 +1,7 @@
 // Arquivo para fazer o ranking depois do Rastreamento de páginas (CrawlPage)
 
 import { getDadosPaginas } from "../crawler/crawl.js";
+import { load } from 'cheerio';
 
 /**
  * Atualiza a propriedade "apontadores" de cada página, indicando quais outras páginas possuem links para ela.
@@ -22,6 +23,46 @@ export function preencherApontadores () {
 }
 
 /**
+ * Remove acentos de um texto (para permitir buscas normalizadas)
+ * @param {string} texto 
+ * @returns {string}
+ */
+function removerAcentos(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+/**
+ * Conta ocorrências de um termo no HTML da página, considerando todo o documento
+ * para maior precisão na busca de termos (incluindo meta tags, títulos, etc.)
+ * 
+ * @param {string} html - HTML da página
+ * @param {string} termo - Termo a ser contado
+ * @returns {number} - Número de ocorrências
+ */
+function contarOcorrencias(html, termo) {
+    // Converte HTML para minúsculas para busca case-insensitive
+    const htmlLower = html.toLowerCase();
+    const termoLower = termo.toLowerCase();
+    
+    // Remove acentos tanto do HTML quanto do termo para normalização
+    const htmlNormalizado = removerAcentos(htmlLower);
+    const termoNormalizado = removerAcentos(termoLower);
+    
+    // Para termos compostos (com espaços), usamos uma abordagem diferente
+    if (termoNormalizado.includes(' ')) {
+        // Para termos compostos, contamos todas as ocorrências sem limite de palavra
+        const regex = new RegExp(termoNormalizado, 'g');
+        const matches = htmlNormalizado.match(regex);
+        return matches ? matches.length : 0;
+    } else {
+        // Para termos simples, garantimos que são palavras completas
+        const regex = new RegExp(`\\b${termoNormalizado}\\b`, 'g');
+        const matches = htmlNormalizado.match(regex);
+        return matches ? matches.length : 0;
+    }
+}
+
+/**
  * Calcula a pontuação total de uma página com base nos critérios:
  * Autoridade, frequência dos termos e penalização por autoreferência.
  *
@@ -31,13 +72,16 @@ export function preencherApontadores () {
  */
 function pontuacao(url, termos) {
     const pagina = getDadosPaginas()[url];
-    const texto = pagina.html.toLowerCase();
-
-    // Frequência dos termos buscados no HTML
+    
+    // Frequência dos termos buscados no HTML (todo o documento)
     let pontosTermos = 0;
+    let totalOcorrencias = 0;
+
     for (const termo of termos) {
-        const ocorrencias = texto.split(termo.toLowerCase()).length - 1;
-        pontosTermos += ocorrencias * 10;
+        // Contagem de ocorrências usando a função específica
+        const ocorrencias = contarOcorrencias(pagina.html, termo);
+        pontosTermos += ocorrencias * 5;
+        totalOcorrencias += ocorrencias;
     }
 
     // Autoridade: quantidade de páginas que apontam para essa
@@ -54,7 +98,7 @@ function pontuacao(url, termos) {
         url,
         score,
         linksRecebidos: pagina.apontadores.length,
-        totalOcorrencias: pontosTermos / 10,
+        totalOcorrencias,
         autoreferencia: temAutoreferencia
     };
 }
