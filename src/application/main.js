@@ -1,42 +1,61 @@
-import { crawlPage, getDadosPaginas } from '../crawler/crawl.js';
-import { buscar, preencherApontadores } from '../search/rank.js';
+function getById(id) {
+  return document.getElementById(id);
+}
 
-const urlInicial = 'https://page-films-mu.vercel.app/pages/duna.html';
-const termosTeste = ['matrix', 'ficção científica', 'realidade', 'universo', 'viagem'];
 
-(async () => {
-    // Etapa de rastreamento das páginas
-    await crawlPage(urlInicial, urlInicial);
+getById('button-search').addEventListener('click', async () => {
+  const termoBuscado = getById('input-search').value;
+  await criarTabela(termoBuscado);
+});
 
-    // Preenche os apontadores (quem aponta para quem)
-    preencherApontadores();
+async function criarTabela(termo) {
+  const response = await fetch(`http://localhost:3000/buscar?termo=${termo}`);
+  const ranking = await response.json();
 
-    // Obtém os dados coletados
-    const dados = getDadosPaginas();
+  const resultsDiv = document.querySelector('.results');
+  resultsDiv.innerHTML = ''; // Limpa a div antes
 
-    // Exibe as páginas visitadas
-    console.log("\nCrawling finalizado. Páginas visitadas:");
-    console.log(Object.keys(dados));
+  const titulo = document.createElement('h2');
+  titulo.textContent = `Resultados para: ${termo.toUpperCase()}`;
+  resultsDiv.appendChild(titulo);
 
-    for (const termo of termosTeste) {
-        const termoFormatado = termo.toUpperCase();
-        console.log(`\n================ BUSCANDO: ${termoFormatado} ================\n`);
+  const table = document.createElement('table');
+  table.classList.add('tabela-resultado');
 
-        const ranking = buscar([termo.toLowerCase()]);
+  // Cabeçalho
+  const thead = document.createElement('thead');
+  thead.innerHTML = `
+    <tr>
+      <th>Posição</th>
+      <th>Página</th>
+      <th>Ocorrências (+5)</th>
+      <th>Links Recebidos (+10)</th>
+      <th>Autoreferência (-15)</th>
+      <th>Total</th>
+    </tr>
+  `;
+  table.appendChild(thead);
 
-        console.log(`Busca pelo termo: ${termoFormatado}`);
-        console.log("| Posição | Página             | Ocorrências (+5) | Links Recebidos (+10) | Autoreferência (-15) | Total |");
-        console.log("|---------|--------------------|-------------------|------------------------|-----------------------|-------|");
+  // Corpo da tabela
+  const tbody = document.createElement('tbody');
 
-        ranking.forEach(({ url, score, linksRecebidos, totalOcorrencias, autoreferencia }, i) => {
-            const pagina = url.split('/').pop();
-            const ocorrenciasStr = `${totalOcorrencias}×5 = ${totalOcorrencias * 5}`.padEnd(19);
-            const linksStr = `${linksRecebidos}×10 = ${linksRecebidos * 10}`.padEnd(22);
-            const autoStr = autoreferencia ? "-15".padEnd(23) : "0".padEnd(23);
-            const totalStr = `${score}`.padEnd(5);
-            console.log(`| ${String(i + 1).padEnd(8)}| ${pagina.padEnd(19)}| ${ocorrenciasStr}| ${linksStr}| ${autoStr}| ${totalStr}|`);
-        });
+  ranking.forEach(({ url, score, linksRecebidos, totalOcorrencias, autoreferencia }, i) => {
+    const pagina = url.split('/').pop();
+    const row = document.createElement('tr');
 
-        console.log("\n");
-    }
-})();
+    row.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${pagina}</td>
+      <td>${totalOcorrencias}×5 = ${totalOcorrencias * 5}</td>
+      <td>${linksRecebidos}×10 = ${linksRecebidos * 10}</td>
+      <td>${autoreferencia ? "-15" : "0"}</td>
+      <td>${score}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  resultsDiv.appendChild(table);
+}
+

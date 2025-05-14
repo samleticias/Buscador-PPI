@@ -1,0 +1,91 @@
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #273033;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.title{
+    color: #33C1F5;
+    font-size: 2em;
+    text-align: center;
+}
+
+.title h1{
+    text-shadow: 0 0 1rem #33C1F5;
+}
+
+.search{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.search input{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #33C1F5;
+    background-color: #273033;
+    color: #33C1F5;
+}
+.search input:focus{
+    outline: none;
+    box-shadow: 0 0 5px #33C1F5;
+}
+
+.search button{
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #33C1F5;
+    color: #273033;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.search button:hover{
+    background-color: #1A8BB5;
+}
+
+.tabela-resultado {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.tabela-resultado thead {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+.tabela-resultado th,
+.tabela-resultado td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.tabela-resultado tbody tr:nth-child(even) {
+  background-color: #f2f9ff; /* azul bem claro */
+}
+
+.tabela-resultado tbody tr:nth-child(odd) {
+  background-color: #e9f3fb; /* outro tom claro pra alternar */
+}
+
+.tabela-resultado tbody tr:hover {
+  background-color: #d0e9ff; /* tom mais forte pro hover */
+}
+
+.results h2 {
+  font-family: Arial, sans-serif;
+  color: #007BFF;
+  margin-top: 20px;
+}
