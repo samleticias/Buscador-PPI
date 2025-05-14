@@ -38,34 +38,15 @@ Web-Search/
 
 ## 🚀 Como Executar
 
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/KaioGabriel-the/Web-Search.git
-cd Web-Search
-```
-
-2. Instale as dependências (caso futuramente adicionadas):
-
-```bash
-npm install
-```
-
-3. Execute o script principal:
-
-```bash
-node index.js
-```
-
-4. Siga as instruções no terminal para inserir a palavra-chave desejada e visualizar os arquivos mais relevantes.
+Link para acesso: [Web-Search](https://web-search-mauve.vercel.app)
 
 ---
 
 ## 👥 Autores
 
 - [Kaio Gabriel](https://github.com/KaioGabriel-the)
-- Enzo Melo Araújo
-- João Victor
-- Sammya Leticia
+- [Enzo Melo Araújo](https://github.com/EnzoMello)
+- [João Victor](https://github.com/victordev018/)
+- [Sammya Leticia](https://github.com/samleticias)
 
 ---
