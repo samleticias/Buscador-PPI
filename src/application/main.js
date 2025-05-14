@@ -9,7 +9,7 @@ getById('button-search').addEventListener('click', async () => {
 });
 
 async function criarTabela(termo) {
-  const response = await fetch(`http://localhost:3000/buscar?termo=${termo}`);
+  const response = await fetch(`https://web-search-mauve.vercel.app/buscar?termo=${termo}`);
   const ranking = await response.json();
 
   const resultsDiv = document.querySelector('.results');

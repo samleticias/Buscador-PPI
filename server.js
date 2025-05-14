@@ -6,7 +6,6 @@ import { crawlPage, getDadosPaginas } from './src/crawler/crawl.js';
 import { buscar, preencherApontadores } from './src/search/rank.js';
 
 const app = express();
-const PORT = 3000;
 app.use(cors());
 
 // Configurar __dirname no ESModules
@@ -33,10 +32,8 @@ app.get('/buscar', async (req, res) => {
     primeira_requisicao = true;
   }
 
-  // Obtém os dados coletados
   const dados = getDadosPaginas();
 
-  // Exibe as páginas visitadas
   console.log("\nCrawling finalizado. Páginas visitadas:");
   console.log(Object.keys(dados));
 
@@ -44,7 +41,5 @@ app.get('/buscar', async (req, res) => {
   res.json(ranking);
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em: http://localhost:${PORT}`);
-});
+// Exporta app como handler para Vercel
+export default app;
