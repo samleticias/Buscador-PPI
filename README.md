@@ -39,7 +39,7 @@ Web-Search/
 ## 🚀 Como Executar
 
 Link para acesso: [Web-Search](https://web-search-mauve.vercel.app)
-
+Link do vídeo no YouTube: [Web-Search](https://youtu.be/y2vfCboJMm0)
 ---
 
 ## 👥 Autores
