@@ -37,9 +37,8 @@ Web-Search/
 ---
 
 ## 🚀 Como Executar
-
-Link para acesso: [Web-Search](https://web-search-mauve.vercel.app)
-Link do vídeo no YouTube: [Web-Search](https://youtu.be/y2vfCboJMm0)
+- Link para acesso: [Web-Search](https://web-search-mauve.vercel.app) <br>
+- Link do vídeo no YouTube: [Demonstração em vídeo](https://youtu.be/y2vfCboJMm0)
 ---
 
 ## 👥 Autores
