@@ -40,26 +40,16 @@ function removerAcentos(texto) {
  * @returns {number} - Número de ocorrências
  */
 function contarOcorrencias(html, termo) {
-    // Converte HTML para minúsculas para busca case-insensitive
     const htmlLower = html.toLowerCase();
     const termoLower = termo.toLowerCase();
-    
-    // Remove acentos tanto do HTML quanto do termo para normalização
+
     const htmlNormalizado = removerAcentos(htmlLower);
     const termoNormalizado = removerAcentos(termoLower);
-    
-    // Para termos compostos (com espaços), usamos uma abordagem diferente
-    if (termoNormalizado.includes(' ')) {
-        // Para termos compostos, contamos todas as ocorrências sem limite de palavra
-        const regex = new RegExp(termoNormalizado, 'g');
-        const matches = htmlNormalizado.match(regex);
-        return matches ? matches.length : 0;
-    } else {
-        // Para termos simples, garantimos que são palavras completas
-        const regex = new RegExp(`\\b${termoNormalizado}\\b`, 'g');
-        const matches = htmlNormalizado.match(regex);
-        return matches ? matches.length : 0;
-    }
+
+    // Contar todas as ocorrências do termo, mesmo dentro de outras palavras
+    const regex = new RegExp(termoNormalizado, 'g');
+    const matches = htmlNormalizado.match(regex);
+    return matches ? matches.length : 0;
 }
 
 /**
